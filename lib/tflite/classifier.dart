@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:ui';
 
@@ -52,35 +51,26 @@ class Classifier {
 
   /// Loads interpreter from asset
   void loadModel({Interpreter interpreter}) async {
-    // try {R
-    Delegate delegate;
-    if (Platform.isLinux || Platform.isMacOS || Platform.isWindows) {
-      delegate = XNNPackDelegate();
-    } else {
-      delegate = GpuDelegate();
-    }
-    _interpreter = interpreter ??
-        await Interpreter.fromAsset(
-          MODEL_FILE_NAME,
-          options: InterpreterOptions()
-            ..addDelegate(
-              delegate,
-            ),
-        );
+    try {
+      _interpreter = interpreter ??
+          await Interpreter.fromAsset(
+            MODEL_FILE_NAME,
+            options: InterpreterOptions()..threads = 4,
+          );
 
-    var outputTensors = _interpreter.getOutputTensors();
-    _outputShapes = [];
-    _outputTypes = [];
-    outputTensors.forEach((tensor) {
-      _outputShapes.add(tensor.shape);
-      _outputTypes.add(tensor.type);
-    });
-    // } catch (e) {
-    //   print("Error while creating interpreter: $e");
-    // }
+      var outputTensors = _interpreter.getOutputTensors();
+      _outputShapes = [];
+      _outputTypes = [];
+      outputTensors.forEach((tensor) {
+        _outputShapes.add(tensor.shape);
+        _outputTypes.add(tensor.type);
+      });
+    } catch (e) {
+      print("Error while creating interpreter: $e");
+    }
   }
 
-  /// Loads labels from assetsR
+  /// Loads labels from assets
   void loadLabels({List<String> labels}) async {
     try {
       _labels =
