@@ -172,7 +172,6 @@ class _CameraViewState extends State<CameraView> with WidgetsBindingObserver {
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     cameraController.dispose();
-    isolateUtils.stopIsolate();
     super.dispose();
   }
 }
