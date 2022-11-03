@@ -21,7 +21,7 @@ class Classifier {
   static const String LABEL_FILE_NAME = "labelmap.txt";
 
   /// Input size of image (height = width = 300)
-  static const int INPUT_SIZE = 300;
+  static const int INPUT_SIZE = 320;
 
   /// Result score threshold
   static const double THRESHOLD = 0.5;
